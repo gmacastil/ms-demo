@@ -64,4 +64,4 @@ jobs:
       run: |
         cd k8s
         sed -i "s|image: mauron/ms-demo:2|image: ${{ vars.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.run_number }}|g" deployment.yaml
-        kubectl apply -f .
+        kubectl apply -f . -n diplomado
