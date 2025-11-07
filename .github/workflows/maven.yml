@@ -29,8 +29,8 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build . -t ms-demo:${{ github.run_number }}
-        docker tag ms-demo:${{ github.run_number }} mauron/ms-demo:${{ github.run_number }}
+        docker build . -t ${{ github.repository }}:${{ github.run_number }}
+        docker tag ${{ github.repository }}:${{ github.run_number }} ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.repository }}:${{ github.run_number }}
 
     - name: Push Docker image to Docker Hub
       env:
@@ -38,4 +38,4 @@ jobs:
         DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
       run: |
         echo $DOCKER_HUB_ACCESS_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
-        docker push mauron/ms-demo:${{ github.run_number }}
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ github.repository }}:${{ github.run_number }}
