@@ -3,6 +3,7 @@ package com.lite.ms_demo.aplicacion;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import com.lite.ms_demo.dominio.Factura;
+import java.security.SecureRandom;
 
 public class ConsultarFactura {
 
@@ -16,17 +17,20 @@ public class ConsultarFactura {
         final double IMPUESTO_MAX = 0.25;
         final double DESCUENTO_MAX = 0.05;
         
+        // Inicialización de generador de números aleatorios seguro
+        SecureRandom random = new SecureRandom();
+        
         // Validación de monto para evitar cálculos con valores negativos
         if (monto < 0) {
             log.warn("Se detectó un monto negativo: {}. Los cálculos podrían no ser correctos.", monto);
         }
         
         // Cálculo de impuesto (entre 15% y 25%)
-        double tasaImpuesto = IMPUESTO_MIN + (Math.random() * (IMPUESTO_MAX - IMPUESTO_MIN));
+        double tasaImpuesto = IMPUESTO_MIN + (random.nextDouble() * (IMPUESTO_MAX - IMPUESTO_MIN));
         double impuesto = Math.round(monto * tasaImpuesto * 100) / 100.0;
         
         // Cálculo de descuento (entre 0% y 5%)
-        double tasaDescuento = Math.random() * DESCUENTO_MAX;
+        double tasaDescuento = random.nextDouble() * DESCUENTO_MAX;
         double descuento = Math.round(monto * tasaDescuento * 100) / 100.0;
         
         // Cálculo del total redondeado a dos decimales para mayor precisión
