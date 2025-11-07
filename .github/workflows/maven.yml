@@ -48,3 +48,20 @@ jobs:
       run: |
         echo $DOCKER_HUB_ACCESS_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
         docker push ${{ vars.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.run_number }}
+
+  continuous-deployment:
+
+    runs-on: self-hosted
+
+    needs: continuous-integration
+
+    steps:
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Deploy to Kubernetes
+      run: |
+        cd k8s
+        sed -i "s|image: mauron/ms-demo:2|image: ${{ vars.DOCKER_HUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.run_number }}|g" deployment.yaml
+        kubectl apply -f .
