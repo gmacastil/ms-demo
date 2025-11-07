@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: ms-demo-config
 data:
-  APP_FACTOR: "1001"
+  APP_FACTOR: "1002"
   APP_MONTO: "250000"
   DB_HOST: "10.120.100.10"
   DB_PORT: "5432"
