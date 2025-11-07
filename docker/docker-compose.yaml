@@ -1,0 +1,12 @@
+
+services:
+  ms-demo-2:
+    image: ms-demo:2          # Imagen que se usará para el contenedor
+    container_name: ms-demo-2 # Nombre del contenedor
+    ports:
+      - "9090:8080"           # Mapea el puerto 8080 del contenedor al 9090 del host
+    environment:
+      - APP_FACTOR=303       # Variable de entorno APP_FACTOR
+      - APP_MONTO=2500      # Variable de entorno APP_MONTO
+    restart: unless-stopped   # Reinicia automáticamente si se detiene (opcional)
+

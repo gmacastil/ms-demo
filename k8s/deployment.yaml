@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-demo-2-deploy
+  labels:
+    app: ms-demo-2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-demo-2
+  template:
+    metadata:
+      labels:
+        app: ms-demo-2
+    spec:
+      containers:
+        - name: ms-demo-2
+          image: mauron/ms-demo:2             
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080       # puerto interno del contenedor
+          # Inyecta variables desde ConfigMap y Secret como variables de entorno
+          envFrom:
+            - configMapRef:
+                name: ms-demo-config
+            - secretRef:
+                name: ms-demo-secret
+          # Probes simples (TCP) para no asumir endpoints HTTP específicos
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          # (Opcional) recursos
+          # resources:
+          #   requests:
+          #     cpu: "100m"
+          #     memory: "128Mi"
+          #   limits:
+          #     cpu: "500m"
+          #     memory: "512Mi"
+      # (Opcional) serviceAccountName, tolerations, nodeSelector, etc.
+
+

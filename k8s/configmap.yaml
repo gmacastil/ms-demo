@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ms-demo-config
+data:
+  APP_FACTOR: "1001"
+  APP_MONTO: "250000"
+  DB_HOST: "10.120.100.10"
+  DB_PORT: "5432"
+  DB_NAME: "msdemo"
+  DB_USER: "msdemo_user"
