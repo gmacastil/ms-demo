@@ -10,16 +10,36 @@ public class ConsultarFactura {
 
     public Factura ejecutar(int id, int monto) {
         Factura factura = new Factura(id, monto);
-        // Cálculos aleatorios del monto
-        double impuesto = monto * (Math.random() * 0.1 + 0.15); // 15-25%
-        double descuento = monto * (Math.random() * 0.05); // 0-5%
-        double total = monto + impuesto - descuento;
+        // Cálculos de impuesto y descuento
+        // Constantes para mejorar legibilidad y mantenibilidad
+        final double IMPUESTO_MIN = 0.15;
+        final double IMPUESTO_MAX = 0.25;
+        final double DESCUENTO_MAX = 0.05;
+        
+        // Validación de monto para evitar cálculos con valores negativos
+        if (monto < 0) {
+            log.warn("Se detectó un monto negativo: {}. Los cálculos podrían no ser correctos.", monto);
+        }
+        
+        // Cálculo de impuesto (entre 15% y 25%)
+        double tasaImpuesto = IMPUESTO_MIN + (Math.random() * (IMPUESTO_MAX - IMPUESTO_MIN));
+        double impuesto = Math.round(monto * tasaImpuesto * 100) / 100.0;
+        
+        // Cálculo de descuento (entre 0% y 5%)
+        double tasaDescuento = Math.random() * DESCUENTO_MAX;
+        double descuento = Math.round(monto * tasaDescuento * 100) / 100.0;
+        
+        // Cálculo del total redondeado a dos decimales para mayor precisión
+        double total = Math.round((monto + impuesto - descuento) * 100) / 100.0;
         factura.setImpuesto(impuesto);
         factura.setDescuento(descuento);
         factura.setTotal(total);
 
-        // Registrar en log
-        log.info(null, factura.getValues());
+        // Registrar en log con información detallada
+        log.info("Factura calculada: ID={}, Monto={}, Impuesto={}, Descuento={}, Total={}",
+                factura.getId(), factura.getMonto(), factura.getImpuesto(),
+                factura.getDescuento(), factura.getTotal());
+        log.debug("Detalles completos de la factura", factura.getValues());
 
         return factura;
     }
